@@ -1,10 +1,26 @@
 from models.user import User
 
 class Employee(User):
-    
-
-    role = "employee"
-
-    def __init__(self, name, email, password_hash):
+   role = "employee"
+   def __init__(self, name, email, password_hash,department="Customer Care"):
         super().__init__(name, email, password_hash)
-        self.role = "employee"
+        self.department = department
+        self._assigned_tickets=[]
+
+def  department(self):
+        return self.department
+
+def department(self, value):
+        self.department = value
+def assigned_tickets(self):
+        return self._assigned_tickets
+
+#---methods ---
+def assign_ticket(self, ticket_id):
+        if ticket_id not in self._assigned_tickets:
+            self._assigned_tickets.append(ticket_id)
+
+   
+
+
+    
