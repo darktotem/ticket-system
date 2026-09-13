@@ -3,8 +3,8 @@ class TicketApp:
         self.auth = AuthManager()
         self.tickets = TicketManager()
         self.current_user = None
-        
-   #Declaring roles for someone to log in as.
+
+    #Declaring roles for someone to log in as.
     def run(self):
         print("Customer Care Ticket System")
         while True:
@@ -69,3 +69,35 @@ class TicketApp:
     def logout(self):
         print(f"Goodbye, {self.current_user.name}.")
         self.current_user = None
+
+    @manager_required
+    def show_manager_menu(self):
+        print("\n1. View all tickets\n2. View all employees\n3. Logout")
+        choice = input("Choose an option: ").strip()
+        if choice == "1":
+            self.view_tickets()
+        elif choice == "2":
+            self.view_employees()
+        elif choice == "3":
+            self.logout()
+        else:
+            print("Invalid option.")
+
+    @manager_required
+    def view_tickets(self):
+        tickets = self.tickets.list_tickets()
+        if not tickets:
+            print("No tickets yet.")
+        for ticket in tickets:
+            print(
+                f"{ticket.ticket_number} | {ticket.status} | "
+                f"assigned: {ticket.assigned_employee or '-'} | {ticket.user_email}"
+            )
+
+    @manager_required
+    def view_employees(self):
+        employees = self.auth.list_employees()
+        if not employees:
+            print("No employees registered.")
+        for employee in employees:
+            print(f"{employee.name} | {employee.email} | ID: {employee.employee_id}")
