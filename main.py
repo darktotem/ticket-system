@@ -156,6 +156,72 @@ class TicketApp:
         for employee in employees:
             print(f"{employee.name} | {employee.email} | ID: {employee.employee_id}")
 
+    # Employee menu (Done by Faith.N)   
+
+    @employee_required
+    def show_employee_menu(self):
+        print(
+            "\n1. View open/pending tickets\n2. Open a ticket by number\n"
+            "3. Log an update (mark pending)\n4. Propose a resolution\n5. Logout"
+        )
+        choice = input("Choose an option: ").strip()
+        if choice == "1":
+            self.list_open_tickets()
+        elif choice == "2":
+            self.view_ticket_by_number()
+        elif choice == "3":
+            self.update_ticket()
+        elif choice == "4":
+            self.propose_resolution()
+        elif choice == "5":
+            self.logout()
+        else:
+            print("Invalid option.")
+
+    @employee_required
+    def list_open_tickets(self):
+        """List all tickets still needing attention ."""
+        tickets = self.tickets.list_tickets(statuses=("open", "pending"))
+        if not tickets:
+            print("No open or pending tickets.")
+        for ticket in tickets:
+            print(
+                f"{ticket.ticket_number} | {ticket.status} | "
+                f"{ticket.user_email} | {ticket.description[:40]}"
+            )
+
+    @employee_required
+    def view_ticket_by_number(self):
+        """Displays full details of one ticket, including its history."""
+        ticket_number = input("Ticket number: ").strip()
+        ticket = self.tickets.get_ticket(ticket_number)
+        if not ticket:
+            print("Ticket not found.")
+            return
+        self.print_ticket_summary(ticket, show_history=True)
+
+    @employee_required
+    def update_ticket(self):
+        """Updates the status of a ticket."""
+        ticket_number = input("Ticket number: ").strip()
+        action = input("What action are you taking / why is it pending? ").strip()
+        ticket = self.tickets.update_ticket(ticket_number, self.current_user, action)
+        if not ticket:
+            print("Ticket not found.")
+            return
+        print(f"Ticket {ticket.ticket_number} marked as pending with your note saved.")
+
+    @employee_required
+    def propose_resolution(self):
+        """Proposes a resolution for a ticket."""
+        ticket_number = input("Ticket number: ").strip()
+        summary = input("How was the issue resolved? ").strip()
+        ticket = self.tickets.propose_resolution(ticket_number, self.current_user, summary)
+        if not ticket:
+            print("Ticket not found.")
+            return
+        print("Resolution recorded. Waiting on customer confirmation to close.")
+
 # Ticket system (Done by victor)
 # Shared helper (to view latest status of a ticket)
     def print_ticket_summary(self, ticket, show_history=False):
@@ -182,3 +248,4 @@ if __name__ == "__main__":
         app.run()
     except KeyboardInterrupt: #just incase someone presses ctrl+c to exit the program.
         print("\nExiting.")
+
