@@ -12,17 +12,27 @@ def login_required(function):
     return wrapper
 
 
-def admin_required(function):
-    @wraps(function)
-    def wrapper(self, *args, **kwargs):
-        if self.current_user is None:
-            print("Please login first.")
-            return None
+def role_required(role):
+    def decorator(function):
+        @wraps(function)
+        def wrapper(self, *args, **kwargs):
+            if self.current_user is None:
+                print("log in first.")
+                return None
+            
+            if self.current_user.role not in role:
+                print(f"Access denied, restricted to: {', '.join(roles)}.")
+                return None
 
-        if self.current_user.role != "admin":
-            print("Admin access required.")
-            return None
+            return function(self, *args, **kwargs)
+        return wrapper
+    return decorator
 
-        return function(self, *args, **kwargs)
+# giving manager super acess. Anaweza fanya whatever the emloyee can.
+def employee_required(function):
+    return role_required("employee", "manager")(function)
 
-    return wrapper
+def manager_required(function):
+    return role_required("manager")(function)
+
+       
