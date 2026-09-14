@@ -123,7 +123,7 @@ class TicketApp:
         return
 
     print(f"Proposed resolution: {ticket.resolution_summary}")
-    answer = input("Was your issue solved? (yes/no): ").strip().lower()
+    answer = input("Was your issue solved? (yes/no): ").strip().lower() 
 
     if answer in ("yes", "y", "solved"):
         self.tickets.confirm_resolution(ticket_number, self.current_user.email, True)
