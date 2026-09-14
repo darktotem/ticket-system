@@ -21,7 +21,7 @@ def role_required(role):
                 return None
             
             if self.current_user.role not in role:
-                print(f"Access denied, restricted to: {', '.join(roles)}.")
+                print(f"Access denied, restricted to: {', '.join(role)}.")
                 return None
 
             return function(self, *args, **kwargs)
