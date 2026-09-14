@@ -78,77 +78,64 @@ class TicketApp:
         self.current_user = None
 
       #Ticket system ya Customer. (Done by Kelvin)
-    @employee_required
-    def show_employee_menu(self):
+    # ---------- Customer ----------
+    @login_required
+    def show_user_menu(self):
         print(
-            "\n1. View open/pending tickets\n2. Open a ticket by number\n"
-            "3. Log an update (mark pending)\n4. Propose a resolution\n5. Logout"
+            "\n1. Raise a new ticket\n2. Check my ticket\n"
+            "3. Respond to a proposed resolution\n4. Logout"
         )
         choice = input("Choose an option: ").strip()
         if choice == "1":
-            self.list_open_tickets()
+            self.raise_ticket()
         elif choice == "2":
-            self.view_ticket_by_number()
+            self.check_ticket()
         elif choice == "3":
-            self.update_ticket()
+            self.respond_to_resolution()
         elif choice == "4":
-            self.propose_resolution()
-        elif choice == "5":
             self.logout()
         else:
             print("Invalid option.")
 
-    @employee_required
-    def list_open_tickets(self):
-        tickets = self.tickets.list_tickets(statuses=("open", "pending"))
-        if not tickets:
-            print("No open or pending tickets.")
-        for ticket in tickets:
-            print(
-                f"{ticket.ticket_number} | {ticket.status} | "
-                f"{ticket.user_email} | {ticket.description[:40]}"
-            )
+    @login_required
+    def raise_ticket(self):
+        description = input("Describe your issue: ").strip()
+        ticket = self.tickets.create_ticket(self.current_user, description)
+        print(f"Ticket created. Your ticket number is: {ticket.ticket_number}")
 
-    @employee_required
-    def view_ticket_by_number(self):
-        ticket_number = input("Ticket number: ").strip()
+    @login_required
+    def check_ticket(self):
+        ticket_number = input("Enter your ticket number: ").strip()
         ticket = self.tickets.get_ticket(ticket_number)
-        if not ticket:
+        if not ticket or ticket.user_email != self.current_user.email:
             print("Ticket not found.")
             return
-        self.print_ticket_summary(ticket, show_history=True)
+        self.print_ticket_summary(ticket)
 
-    @employee_required
-    def update_ticket(self):
-        ticket_number = input("Ticket number: ").strip()
-        action = input("What action are you taking / why is it pending? ").strip()
-        ticket = self.tickets.update_ticket(ticket_number, self.current_user, action)
-        if not ticket:
+    @login_required
+    def respond_to_resolution(self):
+        ticket_number = input("Enter your ticket number: ").strip()
+        ticket = self.tickets.get_ticket(ticket_number)
+        if not ticket or ticket.user_email != self.current_user.email:
             print("Ticket not found.")
             return
-        print(f"Ticket {ticket.ticket_number} marked as pending with your note saved.")
 
-    @employee_required
-    def propose_resolution(self):
-        ticket_number = input("Ticket number: ").strip()
-        summary = input("How was the issue resolved? ").strip()
-        ticket = self.tickets.propose_resolution(ticket_number, self.current_user, summary)
-        if not ticket:
-            print("Ticket not found.")
+        if not ticket.resolution_summary:
+            print("No resolution has been proposed for this ticket yet.")
             return
-        print("Resolution recorded. Waiting on customer confirmation to close.")
-    @manager_required
-    def show_manager_menu(self):
-        print("\n1. View all tickets\n2. View all employees\n3. Logout")
-        choice = input("Choose an option: ").strip()
-        if choice == "1":
-            self.view_all_tickets()
-        elif choice == "2":
-            self.view_employees()
-        elif choice == "3":
-            self.logout()
+
+        print(f"Proposed resolution: {ticket.resolution_summary}")
+        answer = input("Was your issue solved? (yes/no): ").strip().lower()
+
+        if answer in ("yes", "y", "solved"):
+            self.tickets.confirm_resolution(ticket_number, self.current_user.email, True)
+            print("Great — ticket closed.")
         else:
-            print("Invalid option.")
+            feedback = input("What wasn't solved / what happened? ").strip()
+            self.tickets.confirm_resolution(
+                ticket_number, self.current_user.email, False, feedback
+            )
+            print("Got it — the ticket stays open and your note has been saved for the team.")
 
     @manager_required
     def view_all_tickets(self):
