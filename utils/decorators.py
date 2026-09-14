@@ -17,11 +17,11 @@ def role_required(role):
         @wraps(function)
         def wrapper(self, *args, **kwargs):
             if self.current_user is None:
-                print("Please login first.")
+                print("log in first.")
                 return None
             
-            if self.current_user.role != role:
-                print(f"Access restricted to: {', '.join(roles)}.")
+            if self.current_user.role not in role:
+                print(f"Access denied, restricted to: {', '.join(roles)}.")
                 return None
 
             return function(self, *args, **kwargs)
