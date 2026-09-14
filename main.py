@@ -137,3 +137,30 @@ class TicketApp:
             print("Ticket not found.")
             return
         print("Resolution recorded. Waiting on customer confirmation to close.")
+
+# Ticket system 
+# Shared helper (to view latest status of a ticket)
+    def print_ticket_summary(self, ticket, show_history=False):
+        print(f"\nTicket: {ticket.ticket_number}")
+        print(f"Status: {ticket.status}")
+        print(f"Description: {ticket.description}")
+        print(f"Assigned to: {ticket.assigned_employee or 'Unassigned'}")
+        if ticket.resolution_summary:
+            print(f"Proposed resolution: {ticket.resolution_summary}")
+        if ticket.user_feedback:
+            print(f"Customer feedback: {ticket.user_feedback}")
+        if show_history and ticket.history:
+            print("History:")
+            for entry in ticket.history:
+                print(
+                    f"  [{entry['timestamp']}] {entry['by']}: "
+                    f"{entry['action']} (status -> {entry['status']})"
+                )
+
+
+if __name__ == "__main__":
+    app = TicketApp()
+    try:
+        app.run()
+    except KeyboardInterrupt: #just incase someone presses ctrl+c to exit the program.
+        print("\nExiting.")
