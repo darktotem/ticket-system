@@ -12,7 +12,7 @@ def login_required(function):
     return wrapper
 
 
-def role_required(role):
+def role_required(*roles):
     def decorator(function):
         @wraps(function)
         def wrapper(self, *args, **kwargs):
@@ -20,8 +20,8 @@ def role_required(role):
                 print("log in first.")
                 return None
             
-            if self.current_user.role not in role:
-                print(f"Access denied, restricted to: {', '.join(role)}.")
+            if self.current_user.role not in roles:
+                print(f"Access denied, restricted to: {', '.join(roles)}.")
                 return None
 
             return function(self, *args, **kwargs)
