@@ -11,7 +11,7 @@ class TicketApp:
         self.tickets = TicketManager()
         self.current_user = None
         
-   #Declaring roles for someone to log in as.
+#Declaring roles for someone to log in as.
     def run(self):
         print("Customer Care Ticket System")
         while True:
@@ -78,7 +78,6 @@ class TicketApp:
         self.current_user = None
 
       #Ticket system ya Customer. (Done by Kelvin)
-    # ---------- Customer ----------
     @login_required
     def show_user_menu(self):
         print(
@@ -137,6 +136,7 @@ class TicketApp:
             )
             print("Got it — the ticket stays open and your note has been saved for the team.")
 
+ #manager menu (Done by Kelvin)
     @manager_required
     def view_all_tickets(self):
         tickets = self.tickets.list_tickets()
@@ -156,7 +156,7 @@ class TicketApp:
         for employee in employees:
             print(f"{employee.name} | {employee.email} | ID: {employee.employee_id}")
 
-# Ticket system 
+# Ticket system (Done by victor)
 # Shared helper (to view latest status of a ticket)
     def print_ticket_summary(self, ticket, show_history=False):
         print(f"\nTicket: {ticket.ticket_number}")
