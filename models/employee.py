@@ -68,23 +68,5 @@ def from_dict(cls, data):
       return employee
 
 
-   #test 
+   
 
-if __name__ == "__main__":
-    pwd = Employee.hash_password("secret123")
-    e = Employee("Faith Nderitu", "faith@example.com", pwd)
-
-    print(e)
-    e.assign_ticket(101)
-    e.assign_ticket(101)    
-    e.resolve_ticket(101)
-
-    print("Queue:", e.assigned_tickets)
-    print("Serialized:", e.to_dict())
-
-    restored = Employee.from_dict(e.to_dict())
-    print("Restored:", restored)
-    print("Same tickets?", restored.assigned_tickets)  
-
-
-    
