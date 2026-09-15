@@ -241,5 +241,9 @@ class TicketApp:
                     f"{entry['action']} (status -> {entry['status']})"
                 )
 
-
-
+if __name__ == "__main__":
+    app = TicketApp()
+    try:
+        app.run()
+    except KeyboardInterrupt:
+        print("\nExiting.")
