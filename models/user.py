@@ -25,6 +25,12 @@ class User:
             "password_hash": self.password_hash,
             "role": self.role,
         }
+    
+    @classmethod
+    def from_dict(cls, data):
+        user = cls(data["name"], data["email"], data["password_hash"])
+        user.role = data.get("role", "user")
+        return user
 
 class Manager(User):
     def __init__(self, name, email, password_hash):

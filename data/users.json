@@ -4,5 +4,23 @@
         "email": "victor@gmail.com",
         "password_hash": "29bb72f3aa2d13f4c0da08cda282f6dce2edf9ef58e800123effc5666059351b",
         "role": "user"
+    },
+    {
+        "name": "George",
+        "email": "okumu@gmail.com",
+        "password_hash": "fbc07ed5ac1281d0364fcba24245bfd9f109a23e221fc2c645d4ba5bc0cbdc3b",
+        "role": "user"
+    },
+    {
+        "name": "victor@gmail.com",
+        "email": "kuria@gmail.com",
+        "password_hash": "6206c1c4b3a39fa11fa75bbeca1aa7d10db5073c7e0ed47dbbc118aa8fadeb58",
+        "role": "user"
+    },
+    {
+        "name": "martin",
+        "email": "martin@gmail.com",
+        "password_hash": "a00d6af1cfbd7249bf29e2311454234c039beebee2b5e7b6e581423640f71367",
+        "role": "user"
     }
 ]
