@@ -242,10 +242,4 @@ class TicketApp:
                 )
 
 
-if __name__ == "__main__":
-    app = TicketApp()
-    try:
-        app.run()
-    except KeyboardInterrupt: #just incase someone presses ctrl+c to exit the program.
-        print("\nExiting.")
 
