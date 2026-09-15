@@ -1,6 +1,8 @@
 import getpass
 import sys
 
+from rich import print
+
 from utils.auth import AuthManager
 from utils.decorators import employee_required, login_required, manager_required
 from utils.ticket_manager import TicketManager
@@ -247,3 +249,5 @@ if __name__ == "__main__":
         app.run()
     except KeyboardInterrupt:
         print("\nExiting.")
+
+print("[bold magenta]Welcome[/bold magenta], [green]Customer[/green]") 
